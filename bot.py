@@ -13,7 +13,6 @@ bot = Bot(token=TELEGRAM_TOKEN)
 
 seen_tokens = {}
 
-
 def fetch_new_tokens():
     url = "https://public-api.solscan.io/token/list?sortBy=createdAt&direction=desc&limit=10"
     headers = {"token": SOLSCAN_API_KEY}
@@ -24,7 +23,6 @@ def fetch_new_tokens():
     except Exception as e:
         print("Fetch error:", e)
     return []
-
 
 def check_filters(token):
     top10_share = token.get("top10Share", 100)
@@ -41,7 +39,6 @@ def check_filters(token):
     if not (socials.get("tg") or socials.get("x") or socials.get("web")):
         return False
     return True
-
 
 def format_message(token):
     msg = f"""{token.get('name')} ({token.get('url')}) | #{token.get('symbol')} | ${token.get('symbol')}
@@ -61,13 +58,11 @@ CA: {token.get('ca')}
 DEX PAID"""
     return msg
 
-
 def format_multiplier_message(token, mult, mc):
     ca = token.get("ca")
     symbol = token.get("symbol")
     link = f"https://solscan.io/token/{ca}"
     return f"🚀 {symbol} just hit {mult}x!\nMC: ${mc}\n🔗 {link}"
-
 
 def process_tokens():
     tokens = fetch_new_tokens()
@@ -94,8 +89,14 @@ def process_tokens():
                 bot.send_message(chat_id=CHAT_ID, text=format_multiplier_message(t, next_mult, mc))
                 seen_tokens[ca]["next_mult"] += 1
 
-
-if __name__ == "__main__":
+# ---------------------------
+# Əsas dəyişiklik burada:
+# ---------------------------
+def main():
+    print("Bot started...")
     while True:
         process_tokens()
         time.sleep(30)
+
+if __name__ == "__main__":
+    main()
