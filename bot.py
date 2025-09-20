@@ -22,23 +22,12 @@ def fetch_new_tokens():
             return r.json().get("data", [])
     except Exception as e:
         print("Fetch error:", e)
+        tokens = fetch_new_tokens()
+        print("Fetched tokens:", tokens)
     return []
 
 def check_filters(token):
-    top10_share = token.get("top10Share", 100)
-    dex_paid = token.get("dexPaid", False)
-    dev_tokens = token.get("devTokens", 999)
-    socials = token.get("socials", {})
-
-    if top10_share >= 20:
-        return False
-    if not dex_paid:
-        return False
-    if dev_tokens >= 10:
-        return False
-    if not (socials.get("tg") or socials.get("x") or socials.get("web")):
-        return False
-    return True
+    return True  # bütün tokenləri keç
 
 def format_message(token):
     msg = f"""{token.get('name')} ({token.get('url')}) | #{token.get('symbol')} | ${token.get('symbol')}
